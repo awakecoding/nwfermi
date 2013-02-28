@@ -265,8 +265,8 @@ static int fermi_open(struct inode *inode, struct file *file)
 
 	interface = usb_find_interface(&fermi_driver, subminor);
 	if (!interface) {
-		err ("%s - error, can't find device for minor %d",
-		     __func__, subminor);
+		//err ("%s - error, can't find device for minor %d",
+		//     __func__, subminor);
 		retval = -ENODEV;
 		goto exit;
 	}
@@ -516,7 +516,7 @@ static void fermi_bulk_read_complete(struct urb* urb)
 			retval = -EIO;
 			break;
 		default:
-			err("Error on read completion routine. Code: %d", urb->status);
+			//err("Error on read completion routine. Code: %d", urb->status);
 			retval = -EFAULT;
 		}
 	}
@@ -616,7 +616,7 @@ static int fermi_probe(struct usb_interface *interface, const struct usb_device_
 	/* allocate memory for our device state and initialize it */
 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
 	if (!dev) {
-		err("Out of memory");
+		//err("Out of memory");
 		retval = -ENOMEM;
 		goto error;
 	}
@@ -645,7 +645,7 @@ static int fermi_probe(struct usb_interface *interface, const struct usb_device_
 
 	}
 	if (!(dev->bulk_in_endpointAddr)) {
-		err("Could not find bulk-in endpoint");
+		//err("Could not find bulk-in endpoint");
 		goto error;
 	}
 
@@ -657,19 +657,19 @@ static int fermi_probe(struct usb_interface *interface, const struct usb_device_
 	dev->bulk_fifo = kfifo_alloc(BULK_FIFO_SIZE, GFP_KERNEL, &dev->bulk_lock);
 	if (!dev->bulk_fifo) {
 #endif
-		err("Could not allocate bulk_fifo");
+		//err("Could not allocate bulk_fifo");
 		goto error;
 	}
 	dev->bulk_interim_buf = vmalloc(BULK_FIFO_SIZE);
 	if (!dev->bulk_interim_buf) {
-		err("Could not allocate bulk_interim_buf");
+		//err("Could not allocate bulk_interim_buf");
 		goto error;
 	}
 
 	/* initialize our input device */
 	dev->input_dev = input_allocate_device();
 	if (!dev->input_dev) {
-		err("Could not allocate input device");
+		//err("Could not allocate input device");
 		retval = -ENOMEM;
 		goto error;
 	}
@@ -687,7 +687,7 @@ static int fermi_probe(struct usb_interface *interface, const struct usb_device_
 #endif
 	retval = input_register_device(dev->input_dev);
 	if (retval) {
-		err("Could not register input device");
+		//err("Could not register input device");
 		dev->input_dev_registered = false;
 		goto error;
 	}
@@ -700,7 +700,7 @@ static int fermi_probe(struct usb_interface *interface, const struct usb_device_
 	retval = usb_register_dev(interface, &fermi_class);
 	if (retval) {
 		/* something prevented us from registering this driver */
-		err("Not able to get a minor for this device.");
+		//err("Not able to get a minor for this device.");
 		usb_set_intfdata(interface, NULL);
 		goto error;
 	}
@@ -818,8 +818,8 @@ static int __init usb_fermi_init(void)
 
 	/* register this driver with the USB subsystem */
 	result = usb_register(&fermi_driver);
-	if (result)
-		err("usb_register failed. Error number %d", result);
+	//if (result)
+		//err("usb_register failed. Error number %d", result);
 
 	return result;
 }
